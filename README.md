@@ -18,13 +18,13 @@
 
 - Python 3.8 及以上  
 - vobject  
-- openpyxl  
+- xlsxwriter  
 - PySide6  
 
 安装依赖：
 
 ```bash
-pip install vobject openpyxl PySide6
+pip install vobject xlsxwriter PySide6
 ```
 
 ---
