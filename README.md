@@ -53,7 +53,7 @@ python vcf_to_excel_gui.py
 ---
 ## 打包命令
 ```
-python -m nuitka --onefile --enable-plugin=pyside6 --windows-disable-console --output-dir=dist --jobs=auto  vcf_to_excel_gui.py
+python -m nuitka --onefile --enable-plugin=pyside6 --windows-disable-console --output-dir=dist --jobs=6  vcf_to_excel_gui.py
 
 
 ```
