@@ -55,13 +55,20 @@ python vcf_to_excel_gui.py
 ```
 python -m nuitka --onefile --enable-plugin=pyside6 --windows-disable-console --output-dir=dist --jobs=6  vcf_to_excel_gui.py
 
-
 ```
 
----
+
+## 下载地址
+
+windowns:
+https://cloud.189.cn/t/BVzuQbMbi2Mr（访问码：gxh3）
+
+
 
 ## 许可协议
 
 MIT License
+
+---
 
 
