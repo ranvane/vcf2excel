@@ -55,6 +55,9 @@ python vcf_to_excel_gui.py
 ```
 python -m nuitka --onefile --enable-plugin=pyside6 --windows-disable-console --output-dir=dist --jobs=6  vcf_to_excel_gui.py
 
+python -m nuitka --onefile --enable-plugin=pyside6 --windows-disable-console --include-data-files=icons/*.png=icons/  --output-dir=dist --jobs=6  vcf_to_excel_gui.py
+
+
 ```
 
 

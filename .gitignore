@@ -1,1 +1,3 @@
 dist
+nuitka-crash-report.xml
+__pycache__
