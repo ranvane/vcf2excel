@@ -34,7 +34,7 @@ pip install vobject xlsxwriter PySide6
 1. 运行程序：
 
 ```bash
-python vcf_to_excel_gui.py
+python main.py
 ```
 
 2. 点击 **选择VCF文件** 按钮，选择你的 .vcf 通讯录文件  
