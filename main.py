@@ -15,7 +15,15 @@ from PySide6.QtGui import QIcon
 from vcf_to_excel_ui import Ui_VCFtoExcelApp  # 你生成的UI类
 
 class VCFtoExcelApp(QWidget, Ui_VCFtoExcelApp):
+    """
+    VCF到Excel转换器应用程序主类
+    
+    该类继承自QWidget和Ui_VCFtoExcelApp，实现了图形界面和功能逻辑
+    """
     def __init__(self):
+        """
+        初始化VCFtoExcelApp实例
+        """
         super().__init__()
         self.setupUi(self)
         self.setWindowIcon(QIcon("icons/icon.png"))
@@ -41,6 +49,11 @@ class VCFtoExcelApp(QWidget, Ui_VCFtoExcelApp):
         self.table.resizeRowsToContents()
 
     def select_vcf_file(self):
+        """
+        处理选择VCF文件的操作
+        
+        打开文件选择对话框，让用户选择VCF文件，并解析该文件中的联系人信息
+        """
         home = os.path.expanduser("~")
         file_path, _ = QFileDialog.getOpenFileName(self, "选择VCF文件", home, "VCF文件 (*.vcf);;所有文件 (*)")
         if file_path:
@@ -57,6 +70,11 @@ class VCFtoExcelApp(QWidget, Ui_VCFtoExcelApp):
                 self.label.setText("VCF文件解析失败")
 
     def refresh_table(self):
+        """
+        刷新显示联系人信息的表格
+        
+        根据当前过滤后的联系人列表更新表格的列数和内容
+        """
         self.max_tel_count = max(
             (len(c.get("电话", "").split(",")) for c in self.filtered_contacts),
             default=1
@@ -83,11 +101,22 @@ class VCFtoExcelApp(QWidget, Ui_VCFtoExcelApp):
 
 
     def filter_contacts(self, text):
+        """
+        根据输入文本过滤联系人
+        
+        Args:
+            text (str): 用于过滤联系人的搜索文本
+        """
         text = text.strip().lower()
         self.filtered_contacts = [c for c in self.contacts if text in c.get("姓名", "").lower()]
         self.refresh_table()
 
     def convert_to_excel(self):
+        """
+        将联系人信息导出为Excel文件
+        
+        打开文件保存对话框，将当前显示的联系人信息保存为Excel格式文件
+        """
         if not self.filtered_contacts:
             QMessageBox.information(self, "提示", "没有联系人可导出。")
             return
@@ -115,6 +144,18 @@ class VCFtoExcelApp(QWidget, Ui_VCFtoExcelApp):
             QMessageBox.critical(self, "错误", f"导出Excel失败: {e}")
 
     def parse_vcf_safe(self, file_path):
+        """
+        安全地解析VCF文件
+        
+        Args:
+            file_path (str): VCF文件的路径
+            
+        Returns:
+            list: 包含联系人信息的字典列表，每个字典包含姓名和电话字段
+            
+        Raises:
+            RuntimeError: 当vCard解析失败时抛出异常
+        """
         with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
             data = f.read()
         data = re.sub(r'=\r?\n', '', data)
