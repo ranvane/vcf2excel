@@ -75,6 +75,7 @@ class VCFtoExcelApp(QWidget, Ui_VCFtoExcelApp):
         
         根据当前过滤后的联系人列表更新表格的列数和内容
         """
+        # 计算最大电话号码数量以确定列数
         self.max_tel_count = max(
             (len(c.get("电话", "").split(",")) for c in self.filtered_contacts),
             default=1
@@ -82,15 +83,19 @@ class VCFtoExcelApp(QWidget, Ui_VCFtoExcelApp):
         column_count = 1 + self.max_tel_count  # 姓名 + 电话列数
         self.table.setColumnCount(column_count)
 
+        # 设置表头
         headers = ["姓名"] + [f"电话{i+1}" for i in range(self.max_tel_count)]
         self.table.setHorizontalHeaderLabels(headers)
 
+        # 填充表格数据
         self.table.setRowCount(len(self.filtered_contacts))
         for row, contact in enumerate(self.filtered_contacts):
+            # 设置姓名
             name_item = QTableWidgetItem(contact.get("姓名", ""))
             name_item.setTextAlignment(Qt.AlignLeft | Qt.AlignVCenter)
             self.table.setItem(row, 0, name_item)
 
+            # 设置电话号码
             tels = [t.strip() for t in contact.get("电话", "").split(",")]
             for i, tel in enumerate(tels):
                 tel_item = QTableWidgetItem(tel)
@@ -117,21 +122,28 @@ class VCFtoExcelApp(QWidget, Ui_VCFtoExcelApp):
         
         打开文件保存对话框，将当前显示的联系人信息保存为Excel格式文件
         """
+        # 检查是否有联系人需要导出
         if not self.filtered_contacts:
             QMessageBox.information(self, "提示", "没有联系人可导出。")
             return
+            
+        # 获取保存路径
         save_path, _ = QFileDialog.getSaveFileName(self, "保存为Excel", "", "Excel 文件 (*.xlsx)")
         if not save_path:
             return
+            
+        # 导出到Excel
         try:
             workbook = xlsxwriter.Workbook(save_path)
             worksheet = workbook.add_worksheet("联系人")
 
+            # 计算最大电话数量并设置表头
             max_tel_count = max(len(c.get("电话", "").split(",")) for c in self.filtered_contacts)
             header = ["姓名"] + [f"电话{i+1}" for i in range(max_tel_count)]
             for col, title in enumerate(header):
                 worksheet.write(0, col, title)
 
+            # 写入联系人数据
             for row, contact in enumerate(self.filtered_contacts, start=1):
                 worksheet.write(row, 0, contact.get("姓名", ""))
                 tels = [t.strip() for t in contact.get("电话", "").split(",")]
@@ -156,15 +168,21 @@ class VCFtoExcelApp(QWidget, Ui_VCFtoExcelApp):
         Raises:
             RuntimeError: 当vCard解析失败时抛出异常
         """
+        # 读取文件内容
         with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
             data = f.read()
+            
+        # 清理数据，移除换行符和照片数据
         data = re.sub(r'=\r?\n', '', data)
         data = re.sub(r'PHOTO;[^:]*:.*?(?=\n[A-Z]|$)', '', data, flags=re.DOTALL)
+        
+        # 解析vCard
         try:
             vcard_list = list(vobject.readComponents(data))
         except Exception as e:
             raise RuntimeError(f"vCard解析失败: {e}")
 
+        # 提取联系人信息
         contacts = []
         for vcard in vcard_list:
             name = vcard.fn.value if hasattr(vcard, 'fn') else ''
