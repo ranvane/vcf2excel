@@ -53,9 +53,7 @@ python vcf_to_excel_gui.py
 ---
 ## 打包命令
 ```
-python -m nuitka --onefile --enable-plugin=pyside6 --windows-disable-console --output-dir=dist --jobs=6  vcf_to_excel_gui.py
-
-python -m nuitka --onefile --enable-plugin=pyside6 --windows-disable-console --include-data-files=icons/*.png=icons/  --output-dir=dist --jobs=6  vcf_to_excel_gui.py
+python -m nuitka --onefile --enable-plugin=pyside6 --windows-disable-console --include-data-files=icons/*.png=icons/  --output-dir=dist --jobs=6  main.py
 
 
 ```
@@ -64,7 +62,15 @@ python -m nuitka --onefile --enable-plugin=pyside6 --windows-disable-console --i
 ## 下载地址
 
 windowns:
+原始、和带图标第二版都能使用。
+
+原始：
+
 https://cloud.189.cn/t/BVzuQbMbi2Mr（访问码：gxh3）
+
+带图标第二版：
+
+https://cloud.189.cn/t/qIVnAbrqAvIb（访问码：c9de）
 
 
 
